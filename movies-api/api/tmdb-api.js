@@ -36,7 +36,7 @@ const getMovieGenres = async () => {
 const getTvShows = async () => {
     try {
         const response = await fetch(
-            `https://api.themoviedb.org/3/discover/tv?api_key=${process.env.REACT_APP_TMDB_KEY}&include_adult=false&include_null_first_air_dates=false&language=en-US&page=${currentPage}&sort_by=popularity.desc`
+            `https://api.themoviedb.org/3/discover/tv?api_key=${process.env.TMDB_KEY}&include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc`
             
         );
 
