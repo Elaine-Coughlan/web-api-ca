@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebaseDetails";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useContext } from "react";
+
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from '../../contexts/authcontext'
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -9,23 +9,28 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { Alert } from "@mui/material";
-import Signup from "./signup";
+
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const context = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/"); // Redirect to home page
-    } catch (err) {
-      setError("Failed to log in");
-    }
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const login = () => {
+      context.authenticate(userName, password);
   };
+
+  let location = useLocation();
+
+  // Set 'from' to path where browser is redirected after a successful login - either / or the protected path user requested
+  const { from } = location.state ? { from: location.state.from.pathname } : { from: "/" };
+
+  if (context.isAuthenticated === true) {
+      return <Navigate to={from} />;
+  }
+
 
   return (
     <Grid
@@ -37,20 +42,20 @@ const Login = () => {
       <Paper elevation={10} sx={{ padding: 4, backgroundColor: "#f7f7f7" }}>
         <Box
           component="form"
-          onSubmit={handleLogin}
+          onSubmit={login}
           sx={{ display: "flex", flexDirection: "column", gap: 3 }}
         >
           <Typography variant="h4" align="center" gutterBottom>
             Login
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Typography variant="subtitle1">Email:</Typography>
+            <Typography variant="subtitle1">User:</Typography>
             <TextField
-              label="Enter your email"
+              label="Enter your username"
               variant="outlined"
               fullWidth
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
             />
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -73,7 +78,7 @@ const Login = () => {
           >
             Login
           </Button>
-          {error && <Alert severity="error">{error}</Alert>} {}
+          {}
           <Typography align="center">
             Don’t have an account?{" "}
             <Button

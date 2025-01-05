@@ -16,6 +16,7 @@ import TVShowHomePage from "./pages/tvShowsHomePage";
 import TVShowPage from "./pages/tvshowDetailsPage"
 import SignupPage from "./pages/firebasePages/signup"
 import LoginPage from "./pages/firebasePages/login"
+import AuthContextProvider from "./contexts/authcontext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,20 +34,22 @@ const App = () => {
       <BrowserRouter>
         <SiteHeader />
         <MoviesContextProvider>
-          <Routes>
-            <Route path="/reviews/form" element={ <AddMovieReviewPage /> } />
-            <Route path="/movies/favourites" element={<FavouriteMoviePage />} />
-            <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
-            <Route path="/movies/trending" element={<TrendingPage />} />
-            <Route path="/reviews/:id" element={ <MovieReviewPage /> } />
-            <Route path="/movies/:id" element={<MoviePage />} />
-            <Route path="/" element={<HomePage />} />
-            <Route path="*" element={ <Navigate to="/" /> } />
-            <Route path="/tvShows" element={<TVShowHomePage />} />
-            <Route path="/tvShows/:id" element={<TVShowPage/>}/>
-            <Route path="/login" element={<LoginPage/>}/>
-            <Route path="/signup" element={<SignupPage/>}/>
-          </Routes>
+          <AuthContextProvider>
+            <Routes>
+              <Route path="/reviews/form" element={ <AddMovieReviewPage /> } />
+              <Route path="/movies/favourites" element={<FavouriteMoviePage />} />
+              <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
+              <Route path="/movies/trending" element={<TrendingPage />} />
+              <Route path="/reviews/:id" element={ <MovieReviewPage /> } />
+              <Route path="/movies/:id" element={<MoviePage />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="*" element={ <Navigate to="/" /> } />
+              <Route path="/tvShows" element={<TVShowHomePage />} />
+              <Route path="/tvShows/:id" element={<TVShowPage/>}/>
+              <Route path="/login" element={<LoginPage/>}/>
+              <Route path="/signup" element={<SignupPage/>}/>
+            </Routes>
+          </AuthContextProvider>
         </MoviesContextProvider>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />

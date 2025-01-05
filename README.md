@@ -1,15 +1,10 @@
 # Assignment 2 - Web API.
 
-Name: Your Name
+Name: Elaine Coughlan
 
 ## Features.
-
-A bullet-point list of the ADDITIONAL features you have implemented in the API **THAT WERE NOT IN THE LABS** (or modifications to existing features)
- 
- + Feature 1 
- + Feature 2 
- + Feature 3 
- + etc
+Tvshows enpoints in the movies-api. Tmdb and mongo db with tvshow list in intialise-dev/shows.js
+Removed firebase from the login page and replaced with the api/users instead
 
 ## Setup requirements.
 
