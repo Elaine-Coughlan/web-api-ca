@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import { Alert } from "@mui/material";
+
 
 
 const Login = () => {
@@ -17,18 +17,31 @@ const Login = () => {
 
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const location = useLocation();
 
-  const login = () => {
-      context.authenticate(userName, password);
+  const from = location.state?.from?.pathname || "/";
+
+
+  const login = async (event) => {
+    event.preventDefault(); // Prevent page reload
+    setError(null); // Clear any previous errors
+
+
+    try {
+      const success = await context.authenticate(userName, password);
+      if (success) {
+        navigate(from); // Redirect on successful login
+      } else {
+        setError("Invalid username or password");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+    }
   };
 
-  let location = useLocation();
-
-  // Set 'from' to path where browser is redirected after a successful login - either / or the protected path user requested
-  const { from } = location.state ? { from: location.state.from.pathname } : { from: "/" };
-
-  if (context.isAuthenticated === true) {
-      return <Navigate to={from} />;
+  if (context.isAuthenticated) {
+    return <Navigate to={from} />;
   }
 
 

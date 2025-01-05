@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { AuthContext } from '../../contexts/authcontext'
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
@@ -22,6 +23,8 @@ const SiteHeader = ({ history }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   
   const navigate = useNavigate();
+
+  const {isAuthenticated, userName, signout} = useContext(AuthContext);
 
   const menuOptions = [
     { label: "Home", path: "/" },
@@ -99,10 +102,30 @@ const SiteHeader = ({ history }) => {
               </>
             )}
 
-        <>
-          <button onClick={() => navigate("/login")}>Login</button>
-          <button onClick={() => navigate("/signup")}>Signup</button>
-        </>
+              {isAuthenticated ? (
+                  <Typography sx={{ marginLeft: 2 }}>
+                  Welcome {userName}!{" "}
+                  <Button
+                    color="inherit"
+                    onClick={() => {
+                      signout();
+                      navigate("/");
+                    }}
+                  >
+                    Sign out
+                  </Button>
+                </Typography>
+              ) : (
+                <Typography sx={{ marginLeft: 2 }}>
+                  You are not logged in{" "}
+                  <Button color="inherit" onClick={() => navigate("/login")}>
+                    Login
+                  </Button>
+                </Typography>
+
+              )}
+
+
         </Toolbar>
       </AppBar>
       <Offset />

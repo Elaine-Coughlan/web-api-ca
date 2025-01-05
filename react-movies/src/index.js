@@ -17,6 +17,7 @@ import TVShowPage from "./pages/tvshowDetailsPage"
 import SignupPage from "./pages/firebasePages/signup"
 import LoginPage from "./pages/firebasePages/login"
 import AuthContextProvider from "./contexts/authcontext";
+import ProtectedRoute from "./components/protectedRoutes";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,13 +33,23 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <SiteHeader />
         <MoviesContextProvider>
           <AuthContextProvider>
+          <SiteHeader />
             <Routes>
               <Route path="/reviews/form" element={ <AddMovieReviewPage /> } />
-              <Route path="/movies/favourites" element={<FavouriteMoviePage />} />
-              <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
+              <Route path="/movies/favourites" element={
+                    <ProtectedRoute>
+                      <FavouriteMoviePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/movies/upcoming" element={
+                    <ProtectedRoute>
+                      <UpcomingMoviesPage />
+                    </ProtectedRoute>
+                  }
+                />
               <Route path="/movies/trending" element={<TrendingPage />} />
               <Route path="/reviews/:id" element={ <MovieReviewPage /> } />
               <Route path="/movies/:id" element={<MoviePage />} />
